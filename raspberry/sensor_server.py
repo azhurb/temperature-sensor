@@ -8,33 +8,50 @@ from twisted.web import server, resource
 from twisted.internet import reactor
 import pprint
 
-lcd = Adafruit_CharLCD(pins_db=[23, 17, 27, 22])
+#lcd = Adafruit_CharLCD(pins_db=[23, 17, 27, 22])
 
-lcd.begin(16,1)
+#lcd.begin(16,1)
+
+temp = 0
 
 class Simple(resource.Resource):
     isLeaf = True
-    def render_GET(self, request):
+    def render_POST(self, request):
+        global temp
         pprint.pprint(request)
-        return "<html>%s Iterations!</html>"%n
+        temp = float(request.args['value'][0])
+        pprint.pprint(temp)
+        return "OK"
 
 def main():
-    global n
+    global temp
+
+    lcd = Adafruit_CharLCD(pins_db=[23, 17, 27, 22])
+
+    lcd.begin(16,1)
+
     site = server.Site(Simple())
     reactor.listenTCP(8081, site)
     reactor.startRunning(False)
-    n=0
+
     while True:
-        #n+=1
-        #if n%1000==0:
-        #    print n
+
+        #lcd.clear()
+        #lcd.home()
+        #lcd.message(datetime.now().strftime('%b %d  %H:%M:%S\n'))
+        #lcd.message('Temp: %s' % ( temp, '+22.3\337C') )
+        #print 'Temp: %1.1fC' % (temp)
+        #lcd.message(datetime.now().strftime('%b %d  %H:%M:%S\n'))
+        #lcd.message(datetime.now().strftime('%b %d  %H:%M:%S'))
+        #lcd.message('Temp: %1.1fC ' % (temp) )
+        #print 'Temp: %1.1fC' % (temp)
 
         #lcd.clear()
         lcd.home()
         lcd.message(datetime.now().strftime('%b %d  %H:%M:%S\n'))
-        lcd.message('Temp: %s' % ( '+22.3\337C') )
+        lcd.message('IP %s' % ( '172.16.1.117' ) )
 
-        sleep(0.001)
+        sleep(2)
         reactor.iterate()
 
 if __name__=="__main__":

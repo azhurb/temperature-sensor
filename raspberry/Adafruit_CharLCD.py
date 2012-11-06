@@ -64,6 +64,7 @@ class Adafruit_CharLCD:
         self.pin_e = pin_e
         self.pins_db = pins_db
 
+        self.GPIO.setwarnings(False)
         self.GPIO.setmode(GPIO.BCM)
         self.GPIO.setup(self.pin_e, GPIO.OUT)
         self.GPIO.setup(self.pin_rs, GPIO.OUT)

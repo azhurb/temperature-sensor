@@ -12,10 +12,10 @@ local output = OutputPort("Temperature", "number");
 
 imp.configure("Termistor 10K", [], [output]);
 
-hardware.pin1.configure(ANALOG_IN);
+hardware.pin9.configure(ANALOG_IN);
 
 while(true){
-    local temp = thermister(hardware.pin1.read());
+    local temp = thermister(hardware.pin9.read());
     output.set(temp);
     server.show(format("%1.1fºC", temp));  
     server.log("sleep");

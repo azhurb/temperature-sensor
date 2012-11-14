@@ -1,37 +1,27 @@
 #!/usr/bin/env python
-#
-# Copyright 2007 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+
 import webapp2
 import json
 import logging
+import utils
+import time 
 
 from google.appengine.ext import db
 
 class Sensor(db.Model):
     temperature = db.FloatProperty(required = True)
-    battery = db.FloatProperty(required = True)
-    added = db.DateTimeProperty(auto_now_add = True)
+    battery     = db.FloatProperty(required = True)
+    added       = db.DateTimeProperty(auto_now_add = True)
 
-class MainHandler(webapp2.RequestHandler):
+class SensorRequestHandler(webapp2.RequestHandler):
     def post(self):
         logging.debug("request.body: %s", self.request.body)
-        data = json.loads(self.request.body)
-        params = json.loads(data['value'])
-        temp = params['temp']
+
+        data    = json.loads(self.request.body)
+        params  = json.loads(data['value'])
+        temp    = params['temp']
         battery = params['battery']
+        
         logging.debug("temp: %s", temp)
         logging.debug("battery: %s", battery)
 
@@ -40,7 +30,18 @@ class MainHandler(webapp2.RequestHandler):
 
         self.response.out.write('OK')
 
+class LastRequestHandler(webapp2.RequestHandler):
+    def get(self):
+        
+        ordered_list = db.GqlQuery('select * from Sensor order by added desc limit 1')
+        last = ordered_list.get()
+        
+        logging.debug("last: %s", last)
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(utils.GqlEncoder().encode(last))
 
 app = webapp2.WSGIApplication([
-    ('/temp', MainHandler)
+    ('/sensor', SensorRequestHandler),
+    ('/sensor/last', LastRequestHandler)
 ], debug=True)

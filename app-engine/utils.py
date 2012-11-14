@@ -27,8 +27,7 @@ class GqlEncoder(json.JSONEncoder):
 
         elif isinstance(obj, datetime.datetime): 
             return time.mktime(obj.timetuple())
-            #return "%s" % obj.ctime()
-            #return obj.strftime('%a %b %d %H:%M:%S %Y')
+
             # output = {} 
             # fields = ['day', 'hour', 'microsecond', 'minute', 'month', 'second', 'year'] 
             # methods = ['ctime', 'isocalendar', 'isoformat', 'isoweekday', 'timetuple'] 

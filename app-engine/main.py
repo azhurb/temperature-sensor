@@ -4,7 +4,10 @@ import webapp2
 import json
 import logging
 import utils
-import time 
+import time
+import os
+
+from google.appengine.ext.webapp import template
 
 from google.appengine.ext import db
 
@@ -29,6 +32,14 @@ class SensorRequestHandler(webapp2.RequestHandler):
         sensor.put()
 
         self.response.out.write('OK')
+
+    def get(self):
+
+        data = Sensor.all().filter('added>',datetime.date.today() - datetime.timedelta(days=7)).order('added')
+
+        path = os.path.join(os.path.dirname(__file__), 'templates/charts.html')
+        self.response.out.write(template.render(path, {sensor_data}))
+        pass
 
 class LastRequestHandler(webapp2.RequestHandler):
     def get(self):

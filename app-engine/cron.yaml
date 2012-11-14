@@ -1,0 +1,4 @@
+cron:
+- description: daily cleaning job
+  url: /sensor/clean
+  schedule: every 24 hours

@@ -6,15 +6,15 @@ import logging
 import utils
 import time
 import os
+import datetime
 
 from google.appengine.ext.webapp import template
-
 from google.appengine.ext import db
 
 class Sensor(db.Model):
     temperature = db.FloatProperty(required = True)
     battery     = db.FloatProperty(required = True)
-    added       = db.DateTimeProperty(auto_now_add = True)
+    added       = db.DateTimeProperty(auto_now_add = True, indexed=True)
 
 class SensorRequestHandler(webapp2.RequestHandler):
     def post(self):
@@ -35,11 +35,23 @@ class SensorRequestHandler(webapp2.RequestHandler):
 
     def get(self):
 
-        data = Sensor.all().filter('added>',datetime.date.today() - datetime.timedelta(days=7)).order('added')
+        sensors_data = Sensor.all().filter('added >', datetime.date.today() - datetime.timedelta(days=7)).order('added').fetch(None)
 
+        temperature_data = []
+        battery_data     = []
+
+        start_date = int(time.mktime(sensors_data[0].added.timetuple()))*1000
+
+        for item in sensors_data:
+            temperature_data.append(item.temperature)
+            battery_data.append(item.battery)
+        
         path = os.path.join(os.path.dirname(__file__), 'templates/charts.html')
-        self.response.out.write(template.render(path, {sensor_data}))
-        pass
+        self.response.out.write(template.render(path, {
+            'temperature_data' : utils.GqlEncoder().encode(temperature_data), 
+            'battery_data' : utils.GqlEncoder().encode(battery_data),
+            'start_date' : start_date
+            }))
 
 class LastRequestHandler(webapp2.RequestHandler):
     def get(self):
@@ -52,7 +64,26 @@ class LastRequestHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(utils.GqlEncoder().encode(last))
 
+class CleanRequestHandler(webapp2.RequestHandler):
+    def get(self, bulk = 'old'):
+        logging.debug("bulk: %s", bulk)
+        try:
+            while True:
+                q = Sensor.all()
+
+                if bulk != 'all':
+                    q.filter('added <', datetime.date.today() - datetime.timedelta(days=7))
+                
+                assert q.count()
+                db.delete(q.fetch(200))
+                time.sleep(0.5)
+        except Exception, e:
+            self.response.out.write(repr(e)+'\n')
+            pass
+
+
 app = webapp2.WSGIApplication([
     ('/sensor', SensorRequestHandler),
-    ('/sensor/last', LastRequestHandler)
+    ('/sensor/last', LastRequestHandler),
+    ('/sensor/clean/?(all)?', CleanRequestHandler)
 ], debug=True)

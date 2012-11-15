@@ -16,6 +16,12 @@
             var temperature_data = {{ temperature_data|safe  }};
             var battery_data     = {{ battery_data|safe  }};
 
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                }
+            });
+
             var temperature_chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'temperature_container',
@@ -53,13 +59,14 @@
                 },
                 plotOptions: {
                     area: {
-                        fillColor: {
+                        fillOpacity: .5,
+                        /*fillColor: {
                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
                             stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, 'rgba(0,0,0,0)']
+                                [0, 'rgba(0,0,0,0)'],
+                                [1, Highcharts.getOptions().colors[0]]
                             ]
-                        },
+                        },*/
                         lineWidth: 1,
                         marker: {
                             enabled: false,
@@ -82,8 +89,6 @@
                 series: [{
                     type: 'area',
                     name: 'Temperature',
-                    pointInterval: 60 * 1000,
-                    pointStart: start_date,
                     data: temperature_data
                 }]
             });
@@ -113,10 +118,27 @@
                     title: {
                         text: 'Voltage, V'
                     },
-                    min: 3.2,
-                    max: 5,
+                    min: 3,
+                    max: 4.5,
                     startOnTick: false,
-                    showFirstLabel: false
+                    showFirstLabel: false,
+                    plotLines : [{
+                        value : 3.4,
+                        color : 'orange',
+                        dashStyle : 'shortdash',
+                        width : 2,
+                        label : {
+                            text : 'Low battery'
+                        }
+                    }, {
+                        value : 3.2,
+                        color : 'red',
+                        dashStyle : 'shortdash',
+                        width : 2,
+                        label : {
+                            text : 'Critical voltage level'
+                        }
+                    }]
                 },
                 tooltip: {
                     shared: true
@@ -126,14 +148,15 @@
                 },
                 plotOptions: {
                     area: {
-                        fillColor: {
+                        fillOpacity: .1,
+                        /*fillColor: {
                             linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
                             stops: [
                                 [0, Highcharts.getOptions().colors[0]],
                                 [1, 'rgba(0,0,0,0)']
                             ]
-                        },
-                        lineWidth: 1,
+                        },*/
+                        lineWidth: 2,
                         marker: {
                             enabled: false,
                             states: {
@@ -146,7 +169,7 @@
                         shadow: false,
                         states: {
                             hover: {
-                                lineWidth: 1
+                                lineWidth: 2
                             }
                         }
                     }
@@ -155,8 +178,6 @@
                 series: [{
                     type: 'area',
                     name: 'Voltage',
-                    pointInterval: 60 * 1000,
-                    pointStart: start_date,
                     data: battery_data
                 }]
             });

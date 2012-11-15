@@ -43,8 +43,8 @@ class SensorRequestHandler(webapp2.RequestHandler):
         start_date = int(time.mktime(sensors_data[0].added.timetuple()))*1000
 
         for item in sensors_data:
-            temperature_data.append(item.temperature)
-            battery_data.append(item.battery)
+            temperature_data.append([int(time.mktime(item.added.timetuple()))*1000 ,round(item.temperature, 1)])
+            battery_data.append([int(time.mktime(item.added.timetuple()))*1000, round(item.battery, 2)])
         
         path = os.path.join(os.path.dirname(__file__), 'templates/charts.html')
         self.response.out.write(template.render(path, {

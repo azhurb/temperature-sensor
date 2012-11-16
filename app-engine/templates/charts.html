@@ -47,7 +47,7 @@
                     title: {
                         text: 'Temperature, C'
                     },
-                    min: 0,
+                    min: 10,
                     startOnTick: false,
                     showFirstLabel: false
                 },
@@ -60,13 +60,6 @@
                 plotOptions: {
                     area: {
                         fillOpacity: .5,
-                        /*fillColor: {
-                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                            stops: [
-                                [0, 'rgba(0,0,0,0)'],
-                                [1, Highcharts.getOptions().colors[0]]
-                            ]
-                        },*/
                         lineWidth: 1,
                         marker: {
                             enabled: false,
@@ -130,15 +123,7 @@
                         label : {
                             text : 'Low battery'
                         }
-                    }/*, {
-                        value : 3.2,
-                        color : 'red',
-                        dashStyle : 'shortdash',
-                        width : 2,
-                        label : {
-                            text : 'Critical voltage level'
-                        }
-                    }*/]
+                    }]
                 },
                 tooltip: {
                     shared: true
@@ -149,13 +134,6 @@
                 plotOptions: {
                     area: {
                         fillOpacity: .1,
-                        /*fillColor: {
-                            linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1},
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, 'rgba(0,0,0,0)']
-                            ]
-                        },*/
                         lineWidth: 2,
                         marker: {
                             enabled: false,

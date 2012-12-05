@@ -72,7 +72,7 @@ class CleanRequestHandler(webapp2.RequestHandler):
                 q = Sensor.all()
 
                 if bulk != 'all':
-                    q.filter('added <', datetime.date.today() - datetime.timedelta(days=7))
+                    q.filter('added <', datetime.date.today() - datetime.timedelta(days=14))
                 
                 assert q.count()
                 db.delete(q.fetch(200))

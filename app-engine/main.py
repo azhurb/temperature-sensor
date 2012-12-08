@@ -35,12 +35,13 @@ class SensorRequestHandler(webapp2.RequestHandler):
 
     def get(self):
 
-        sensors_data = Sensor.all().filter('added >', datetime.date.today() - datetime.timedelta(days=7)).order('added').fetch(None)
+        #sensors_data = Sensor.all().filter('added >', datetime.date.today() - datetime.timedelta(days=7)).order('added').fetch(None)
+        sensors_data = Sensor.all().order('added').fetch(None)
 
         temperature_data = []
         battery_data     = []
 
-        start_date = int(time.mktime(sensors_data[0].added.timetuple()))*1000
+        #start_date = int(time.mktime(sensors_data[0].added.timetuple()))*1000
 
         for item in sensors_data:
             temperature_data.append([int(time.mktime(item.added.timetuple()))*1000 ,round(item.temperature, 1)])
@@ -49,8 +50,7 @@ class SensorRequestHandler(webapp2.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'templates/charts.html')
         self.response.out.write(template.render(path, {
             'temperature_data' : utils.GqlEncoder().encode(temperature_data), 
-            'battery_data' : utils.GqlEncoder().encode(battery_data),
-            'start_date' : start_date
+            'battery_data' : utils.GqlEncoder().encode(battery_data)
             }))
 
 class LastRequestHandler(webapp2.RequestHandler):

@@ -35,13 +35,10 @@ class SensorRequestHandler(webapp2.RequestHandler):
 
     def get(self):
 
-        #sensors_data = Sensor.all().filter('added >', datetime.date.today() - datetime.timedelta(days=7)).order('added').fetch(None)
         sensors_data = Sensor.all().order('added').fetch(None)
 
         temperature_data = []
         battery_data     = []
-
-        #start_date = int(time.mktime(sensors_data[0].added.timetuple()))*1000
 
         for item in sensors_data:
             temperature_data.append([int(time.mktime(item.added.timetuple()))*1000 ,round(item.temperature, 1)])

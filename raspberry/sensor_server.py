@@ -24,29 +24,17 @@ class Simple(resource.Resource):
         return "OK"
 
 def main():
-    #global temp
-
-    #lcd = Adafruit_CharLCD(pins_db=[23, 17, 27, 22])
-    #lcd.clear()
-    #lcd.begin(16,1)
 
     site = server.Site(Simple())
     reactor.listenTCP(8081, site)
     reactor.startRunning(False)
 
     while True:
-
-        #lcd.clear()
         lcd.home()
         sleep(0.05)
         print 'Temp: %1.1fC' % (temp)
         lcd.message(datetime.now().strftime('%b %d  %H:%M:%S\n'))
         lcd.message('Temp: %1.1f\337C ' % (temp) )
-
-        #lcd.clear()
-        #sleep(0.05)
-        #lcd.message(datetime.now().strftime('%b %d  %H:%M:%S\n'))
-        #lcd.message('Temp: -22C')
 
         reactor.iterate()
         sleep(2)
@@ -56,4 +44,3 @@ if __name__=="__main__":
         main()
     except KeyboardInterrupt:
         pass
-        #lcd.cleanup()

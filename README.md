@@ -12,8 +12,9 @@ Electric imp + raspberry pi temperature sensor
 Just copy all code to the targets.
 
 
-## Demo
-http://www.youtube.com/watch?v=9VXV8oFREfw
+## More
+Video: http://www.youtube.com/watch?v=9VXV8oFREfw
+Description in Russian: https://geektimes.ru/post/257698/
 
 ## Licence
 Licensed under the MIT license.

@@ -13,7 +13,7 @@ Just copy all code to the targets.
 
 
 ## More
-[![Electric Imp - WiFi thermometer](misc/youtube.png)](https://www.youtube.com/watch?v=9VXV8oFREfw)
+[![Electric Imp - WiFi thermometer](misc/youtube_preview.png)](https://www.youtube.com/watch?v=9VXV8oFREfw)
 Description in Russian: https://geektimes.ru/post/257698/
 
 ## Licence

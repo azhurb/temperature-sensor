@@ -1,6 +1,6 @@
 # temperature-sensor
 
-Electric imp + raspberry pi temperature sensor
+WiFi thermometer with Electric Imp, Raspberry Pi, and a thermistor.
 
 ## Installation
 `app-engine/` - Scripts for Google App Engine. Server side for collecting and storing data.

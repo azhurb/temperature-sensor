@@ -1,4 +1,4 @@
-# temperature-sensor
+# Wireless Temperature Sensor
 
 WiFi thermometer with Electric Imp, Raspberry Pi, and a thermistor.
 
